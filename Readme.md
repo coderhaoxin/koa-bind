@@ -13,12 +13,15 @@ function fn(ms, cb) {
   setTimeout(cb(null, ms), ms);
 }
 
-var pfn = promisify(fn);
+var p = promisify(fn);
 
-pfn(10).then(function(ms) {
+p(10).then(function(ms) {
   console.log('delay: %d', ms);
 });
 ```
+
+### License
+MIT
 
 [npm-img]: https://img.shields.io/npm/v/native-promisify.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/native-promisify
