@@ -85,32 +85,93 @@ describe('## promisify', function() {
         done();
       });
     });
+
+    it('ignore generator function', function(done) {
+      var g = function * () {};
+      equal(promisify(g).toString(), g.toString());
+      done();
+    });
   });
 
   describe('# callback style function with context', function() {
     it('success', function(done) {
-      var c = {
-        total: 0,
-        count: function(ms, num, cb) {
-          var self = this;
-
-          setTimeout(function() {
-            self.total += num;
-            cb(null, self.total);
-          }, ms);
-        }
-      };
+      var c = newObj();
 
       c.count = promisify(c.count);
 
-      c.count(10, 20)
-        .then(function(total) {
-          equal(total, 20);
-          return c.count(10, 30);
-        }).then(function(total) {
-          equal(total, 50);
+      c.count(10)
+        .then(function() {
+          equal(c.total, 10);
+          return c.count(20);
+        }).then(function() {
+          equal(c.total, 30);
           done();
         });
     });
   });
+
+  describe('# object', function() {
+    it('success', function(done) {
+      var obj = promisify(newObj());
+
+      obj.delay(1).then(function(ms) {
+        equal(ms, 1);
+        return obj.count(5);
+      }).then(function() {
+        equal(obj.total, 5);
+        done();
+      });
+    });
+  });
+
+  describe('# object with filter', function() {
+    it('array filter', function(done) {
+      var obj = promisify(newObj(), ['count']);
+
+      obj.count(5).then(function() {
+        equal(typeof obj.delay.then, 'undefined');
+        equal(obj.total, 5);
+        done();
+      });
+    });
+
+    it('filter function', function(done) {
+      var obj = promisify(newObj(), function(key) {
+        return key === 'count';
+      });
+
+      obj.count(5).then(function() {
+        equal(typeof obj.delay.then, 'undefined');
+        equal(obj.total, 5);
+        done();
+      });
+    });
+
+    it('just ignore array', function(done) {
+      // any use case?
+      equal(promisify([1, 2, 3]), [1, 2, 3]);
+      done();
+    });
+  });
 });
+
+function newObj() {
+  var obj = {
+    total: 0,
+    delay: function(ms, cb) {
+      setTimeout(function() {
+        cb(null, ms);
+      }, ms);
+    },
+    count: function(num, cb) {
+      this.total += num;
+      var self = this;
+
+      setImmediate(function() {
+        cb(null, self.total);
+      });
+    }
+  };
+
+  return obj;
+}

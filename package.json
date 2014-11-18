@@ -1,15 +1,15 @@
 {
   "name": "native-promisify",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "convert callback function to promise only use native promise",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node_modules/.bin/_mocha -R spec -t 50 test/*.js",
-    "test-cov": "node node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -R dot -t 50 test/*.js",
-    "test-travis": "node node_modules/.bin/istanbul cover node_modules/.bin/_mocha --report lcovonly -- -R dot -t 50 test/*.js"
+    "test": "mocha --harmony -R spec -t 500 test/*.js",
+    "test-cov": "node --harmony node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -R dot -t 500 test/*.js",
+    "test-travis": "node --harmony node_modules/.bin/istanbul cover node_modules/.bin/_mocha --report lcovonly -- -R dot -t 500 test/*.js"
   },
   "repository": {
     "type": "git",

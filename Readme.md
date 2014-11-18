@@ -8,7 +8,11 @@
 
 ```js
 var promisify = require('native-promisify');
+```
 
+* promisify function
+
+```js
 function fn(ms, cb) {
   setTimeout(cb(null, ms), ms);
 }
@@ -17,6 +21,28 @@ var p = promisify(fn);
 
 p(10).then(function(ms) {
   console.log('delay: %d', ms);
+});
+```
+
+* promisify object
+
+```js
+var obj = {
+  name: 'hello',
+  show: fun1,
+  tell: fun2,
+  ping: fun3
+};
+
+// promisify all functions (exclude generator function) of the object
+promisify(origin);
+
+// only promisify `show`, `tell`
+promisify(origin, ['show', 'tell']);
+
+// filter function
+promisify(origin, function(key) {
+  return key === 'ping';
 });
 ```
 
