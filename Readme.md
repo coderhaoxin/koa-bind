@@ -1,3 +1,5 @@
+### Deprecated, please use [thenify](https://github.com/thenables/thenify) or [thenify-all](https://github.com/thenables/thenify-all)
+
 [![NPM version][npm-img]][npm-url]
 [![Build status][travis-img]][travis-url]
 [![Test coverage][coveralls-img]][coveralls-url]
